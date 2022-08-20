@@ -28,6 +28,9 @@ class ImageListPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               if (_.isLoaded) {
+                if (_.images.isEmpty) {
+                  return const Center(child: Text("No Images found"));
+                }
                 return ListView.builder(
                   itemCount: _.images.length,
                   itemBuilder: (context, index) {
