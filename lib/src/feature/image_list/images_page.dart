@@ -29,41 +29,59 @@ class ImagesPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               if (_.isLoaded) {
+                if (_.images.isEmpty) {
+                  return const Center(child: Text("No Images found"));
+                }
                 return ListView.builder(
-                  itemCount: _.images.length,
+                  controller: _.scrollController,
+                  itemCount: _.images.length + 1,
                   itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: (() {
-                        showImageViewer(
-                            context,
-                            Image.network(
-                              _.images[index].largeImageURL ?? "",
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                return const CircularProgressIndicator();
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  alignment: Alignment.center,
-                                  color: Colors.white,
-                                  child: const Icon(
-                                    Icons.error,
-                                    color: Colors.red,
-                                    size: 15,
-                                  ),
-                                );
-                              },
-                            ).image,
-                            swipeDismissible: true);
-                      }),
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: Container(
-                            margin: const EdgeInsets.all(20),
-                            child: CustomNetworkImage(
-                                _.images[index].largeImageURL)),
-                      ),
-                    );
+                    if (index < _.images.length) {
+                      return InkWell(
+                        onTap: (() {
+                          showImageViewer(
+                              context,
+                              Image.network(
+                                _.images[index].largeImageURL ?? "",
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  return const CircularProgressIndicator();
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.white,
+                                    child: const Icon(
+                                      Icons.error,
+                                      color: Colors.red,
+                                      size: 15,
+                                    ),
+                                  );
+                                },
+                              ).image,
+                              swipeDismissible: true);
+                        }),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
+                              margin: const EdgeInsets.all(20),
+                              child: CustomNetworkImage(
+                                  _.images[index].largeImageURL)),
+                        ),
+                      );
+                    }
+                    if (_.paginationDataLoading) {
+                      return const Center(child: CircularProgressIndicator())
+                          .marginAll(50);
+                    }
+                    if (_.isError) {
+                      return Center(
+                        child: TextButton(
+                            onPressed: () => _.fetchPaginatedData(),
+                            child: const Text("Retry")),
+                      ).marginAll(50);
+                    }
+                    return Container();
                   },
                 );
               }

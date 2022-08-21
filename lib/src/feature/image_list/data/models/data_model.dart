@@ -1,4 +1,4 @@
-import 'package:image_app/src/feature/data/models/model.dart';
+import 'package:image_app/src/feature/image_list/data/models/model.dart';
 
 class DataModel extends Models<DataModel> {
   int? total;

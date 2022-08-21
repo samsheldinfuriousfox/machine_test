@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio;
-import 'package:image_app/src/feature/data/models/model.dart';
+import 'package:image_app/src/feature/image_list/data/models/model.dart';
 
 class ApiClient extends GetxService {
   String baseUrl;
