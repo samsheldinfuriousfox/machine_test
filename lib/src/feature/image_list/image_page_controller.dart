@@ -59,18 +59,20 @@ class ImagePageController extends GetxController {
   }
 
   fetchPaginatedData() async {
+    _changePaginationStatus(true, false, false);
+
     Either<EmptyResponseModel, DataModel?> result =
         await _imageRepo.fetchImages(query.value, page);
     result.fold((l) {
-      _changeStatus(false, false, true);
+      _changePaginationStatus(false, false, true);
     }, (r) {
       if (r == null) {
-        _changeStatus(false, false, true);
+        _changePaginationStatus(false, false, true);
       } else {
         images.addAll(r.hits ?? <Hits>[]);
         page++;
 
-        _changeStatus(false, true, false);
+        _changePaginationStatus(false, true, false);
       }
     });
   }
